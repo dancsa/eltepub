@@ -11,7 +11,6 @@
 
 
 int assertSuccess(const char * msg, int rv);
-//ssize_t assertRead(const char * msg, int fd, const void * buffer, size_t count);
 
 int main(void){
 
@@ -26,7 +25,7 @@ int main(void){
 	struct sockaddr_in server_name;
 	server_name.sin_family = AF_INET;
 	server_name.sin_addr.s_addr= htonl(INADDR_LOOPBACK); 
-	server_name.sin_port = htons(10000); //binding to port zero causes the kernel to choose one from the free ports for us
+	server_name.sin_port = htons(10000); 
 
 	int32_t message;
 	while(1){
