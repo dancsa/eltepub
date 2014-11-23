@@ -11,7 +11,6 @@
 
 
 int assertSuccess(const char * msg, int rv);
-//ssize_t assertRead(const char * msg, int fd, const void * buffer, size_t count);
 
 int main(void){
 
@@ -23,12 +22,18 @@ int main(void){
 	//INADDR_ANY could be used to listen to all interface (usually marked with 0.0.0.0 ip address)
 	server_name.sin_port = htons(10000);
 
+	//the following 2 line will configure the socket to  enable reusing it just after closing
+	//the default is that the kernel reserve the port for a time even after quit.
 	const int one = 1;
 	assertSuccess("setsockopts", setsockopt(server, SOL_SOCKET, SO_REUSEADDR, &one, sizeof(int)));
+	//Binding to the interface, port pair
 	assertSuccess("bind", bind(server, (const struct sockaddr *) &server_name, sizeof(server_name)));
+
+	//We need to store the client's address to reply
 	struct sockaddr_in clientaddr;
-	int32_t message;
 	socklen_t addrlength;
+	int32_t message;
+
 	while(1){
 		addrlength = sizeof(clientaddr);
 		recvfrom(server, &message, sizeof(message), 0, (struct sockaddr *) &clientaddr, &addrlength );
