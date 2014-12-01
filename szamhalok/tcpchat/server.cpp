@@ -69,6 +69,7 @@ int main(void){
 		select(max+1, &readset, NULL, NULL, NULL);
 	
 		for( cit = clients.begin(); cit != clients.end(); cit++){
+			if ( !FD_ISSET( *cit, &readset) ) continue;
 			msg = doreceivemsg(*cit);
 			for( cit2 = clients.begin(); cit2 != clients.end(); cit2++){
 				dosendmsg(*cit2, msg);
